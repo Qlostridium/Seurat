@@ -1,26 +1,36 @@
+#!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-//////////////////////////////////////////////////////
-//  Import sub-workflows from the modules:
-
-include SC__FILE_CONVERTER from '../utils/processes/utils.nf' params(params)
-
-include SC__TEMPLATE__PROCESS1 from './processes/process1.nf' params(params)
-
-
-//////////////////////////////////////////////////////
-// Define the workflow
-
-workflow template {
-
-    take:
-        data
-
-    main:
-        data = SC__FILE_CONVERTER(data)
-        data.view()
-
-        SC__TEMPLATE__PROCESS1(data)
-
+include run_HTO from './workflows/HTO.nf' params(params)
+include run_RNA from './workflows/RNA.nf' params(params)
+include run_ADT from './workflows/ADT.nf' params(params)
+workflow HTO {
+	input = Channel.fromPath(params.Seurat.seuratObjBuilder.inputFile)
+					.map{ file -> tuple(params.sampleName,file)}
+	run_HTO(input)
 }
 
+workflow RNA {
+	if(params.Seurat.seuratObjBuilder.inputFile == null){
+		seuratInput = Channel.fromPath(params.inputFile)
+						.map{ file -> tuple(params.sampleName,file)}
+	} else {
+		input = Channel.fromPath(params.Seurat.seuratObjBuilder.inputFile)
+						.map{ file -> tuple(params.sampleName,file)}
+		seuratInput = SEURAT__SEURAT_OBJECT_BUILDER(input)
+	}
+	run_RNA(seuratInput)
+}
+
+workflow ADT {
+	input = Channel.fromPath(params.inputFile)
+					.map{ file -> tuple(params.sampleName,file)}
+	run_ADT(input)
+}
+
+workflow ALL {
+	input = Channel.fromPath(params.Seurat.seuratObjBuilder.inputFile)
+					.map{ file -> tuple(params.sampleName,file)}
+	run_HTO(input)
+	run_RNA(run_HTO.out)
+}
