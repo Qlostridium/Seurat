@@ -1,10 +1,10 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
-scriptDir = (params.folder.standAlone == true) ? "${params.folder.runDir}/processes": "${params.folder.runDir}/repos/Nf_Module_Seurat/processes"
+scriptDir = (!(params.folder.standAlone == null) && params.folder.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process annotation_graphs {
-	publishDir "${params.folder.outDir}/${params.sampleName}", mode: 'symlink', pattern: "Plots/**"
-	publishDir "${params.folder.outDir}/${params.sampleName}", mode: 'symlink', pattern: "allClusters_${samplename}.xlsx"
+	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
+	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "allClusters_${samplename}.xlsx"
 	container params.Seurat.container
   input:
 	tuple val(samplename), file(seuratobj)
@@ -27,11 +27,6 @@ workflow SEURAT__ANNOTATION_GRAPHS {
 		input
 		assayname
 	main:
-
-		//if(params.Seurat.annotationGraphs.containsKey(input[0]))
-		//	assayParams = sampleParams."${input[0]}"
-		//else
-		//	assayParams = sampleParams
 
 		if(params.Seurat.annotationGraphs.containsKey(assayname)){
 			assayParams = params.Seurat.annotationGraphs."${assayname}"

@@ -1,10 +1,10 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-scriptDir = (params.folder.standAlone == true) ? "${params.folder.runDir}/processes": "${params.folder.runDir}/repos/Nf_Module_Seurat/processes"
+scriptDir = (!(params.folder.standAlone == null) && params.folder.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__FIND_VARIABLE_FEATURES{
-	publishDir "${params.folder.outDir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
+	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
 	input:
 	tuple val(samplename), file(sobj)
 	val assayType

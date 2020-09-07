@@ -1,11 +1,10 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
-scriptDir = (params.folder.standAlone == true) ? "${params.folder.runDir}/processes": "${params.folder.runDir}/repos/Nf_Module_Seurat/processes"
-
+scriptDir = (!(params.folder.standAlone == null) && params.folder.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 process SEURAT__HTO_VISUALISATION {
 	//publishDir "${params.global.outDir}/${params.global.runName}", mode: 'symlink'
-	publishDir "${params.folder.outDir}/${samplename}", mode: 'symlink', pattern : "Robjects/**"
-	publishDir "${params.folder.outDir}/${samplename}", mode: 'move', pattern: "Plots/HTO/**"
+	publishDir "${params.global.outDir}/${samplename}", mode: 'symlink', pattern : "Robjects/**"
+	publishDir "${params.global.outDir}/${samplename}", mode: 'move', pattern: "Plots/HTO/**"
 	container params.Seurat.container
   input:
 	tuple val(samplename), file(seuratobj)
