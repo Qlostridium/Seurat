@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-scriptDir = (params.global.standAlone == true) ? "${params.global.runDir}/processes": "${params.global.runDir}/repos/Nf_Module_Seurat/processes"
+scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/repos/Nf_Module_Seurat/processes"
 
 process SEURAT__SCALING{
 	//publishDir "${params.global.outDir}/${samplename}", mode: 'symlink'
