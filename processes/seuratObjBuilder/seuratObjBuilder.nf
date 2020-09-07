@@ -4,7 +4,7 @@ nextflow.preview.dsl=2
 scriptDir = (!(params.global.standAlone == null) && params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__SEURAT_OBJECT_BUILDER {
-	//publishDir "${params.folder.outDir}/${samplename}", mode: 'symlink'
+	//publishDir "${params.global.outDir}/${samplename}", mode: 'symlink'
 	container params.Seurat.container
 	input:
 	tuple val(samplename), val(cmat)
