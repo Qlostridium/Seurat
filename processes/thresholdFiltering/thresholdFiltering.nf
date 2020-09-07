@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
-scriptDir = (!(params.folder.standAlone == null) && params.folder.standAlone == true) ? "${params.global.runDir}/processes": "${params.global.runDir}/src/Seurat/processes"
+scriptDir = (!(params.global.standAlone == null) && params.global.standAlone == true) ? "${params.global.runDir}/processes": "${params.global.runDir}/src/Seurat/processes"
 process SEURAT__THRESHOLDFILTERING{
 	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/RNA/**"
 	input:

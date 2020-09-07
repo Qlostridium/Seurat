@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-include run_HTO from './workflows/HTO.nf' params(params)
-include run_RNA from './workflows/RNA.nf' params(params)
-include run_ADT from './workflows/ADT.nf' params(params)
+include {run_HTO } from'./workflows/HTO.nf' params(params)
+include {run_RNA } from'./workflows/RNA.nf' params(params)
+include {run_ADT } from'./workflows/ADT.nf' params(params)
 
 workflow HTO {
 	input = Channel.fromPath(params.Seurat.seuratObjBuilder.inputFile)
