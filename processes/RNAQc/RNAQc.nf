@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-scriptDir = (!(params.global.standAlone == null) && params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
+scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__RNA_QC{
 	publishDir "${params.global.outdir}/${samplename}", mode: 'move', pattern: "Plots/RNA/**"

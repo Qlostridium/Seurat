@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
-scriptDir = (!(params.global.standAlone == null) && params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
+scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__MARKER_GENES{
 	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink'

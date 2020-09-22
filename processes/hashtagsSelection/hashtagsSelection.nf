@@ -1,10 +1,10 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-scriptDir = (!(params.global.standAlone == null) && params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
+scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__HASHTAGS_SELECTION{
-	publishDir "${params.global.outDir}/${samplename}", mode: 'symlink', pattern : "${samplename}_logQC.txt"
+	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern : "${samplename}_logQC.txt"
 	container params.Seurat.container
 	input:
 	tuple val(samplename), file(sobj)
