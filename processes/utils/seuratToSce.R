@@ -23,7 +23,7 @@ seuratObj <- readRDS(file = opt$seuratObj)
 
 sceObj <- as.SingleCellExperiment(seuratObj)
 
-sceObj@metadata@project.name <- seuratObj@project.name
+sceObj@metadata$project.name <- seuratObj@project.name
 sceObj@metadata$misc <- seuratObj@misc
 sceObj@metadata$tools <- seuratObj@tools
 
