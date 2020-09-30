@@ -104,11 +104,15 @@ metaData<-data.frame("staticNr" = colnames(seuratObj@assays$RNA@counts),
 rownames(metaData)<-metaData$staticNr
 metaData$staticNr <- 1
 
+
+genome1Pattern <- ifelse(is.na(opt$genomeName1),"",paste0(opt$genomeName1,"(_|-){1,}"))
+genome2Pattern <- ifelse(is.na(opt$genomeName2),"",paste0(opt$genomeName2,"(_|-){1,}"))
+
+
 if(opt$covidGenes){
   #### Get COVID genes
   seuratObj@misc$covid.genes <- c("ORF1ab", "S", "ORF3a", "E", "M", "ORF6",
                                   "ORF7a", "ORF7b", "ORF8", "N", "ORF10")
-  genome2Pattern <- ifelse(is.na(opt$genomeName2),"",paste0(opt$genomeName2,"(_|-){1,}"))
   covidPatterns <- paste0("(^|",genome2Pattern,")",seuratObj@misc$covid.genes,"$")
   is.covidList <- lapply(covidPatterns,function(x) grepl(x, rownames(seuratObj), ignore.case = TRUE))
   is.covid <- as.logical(rowSums(simplify2array(is.covidList)))
@@ -124,7 +128,6 @@ if(opt$rbcGenes){
                                   "RPS24", "SELENBP1", "SERF2", "SLC25A37", "SLC25A39", "SNCA",
                                   "TPT1", "UBA52", "UBB", "YBX3")
 
-  genome1Pattern <- ifelse(is.na(opt$genomeName1),"",paste0(opt$genomeName1,"(_|-){1,}"))
   rbcPatterns <- paste0("(^|",genome1Pattern,")",seuratObj@misc$rbc.genes,"$")
   is.rbcList <- lapply(rbcPatterns,function(x) grepl(x, rownames(seuratObj), ignore.case = TRUE))
   is.rbc <- as.logical(rowSums(simplify2array(is.rbcList)))

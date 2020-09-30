@@ -4,6 +4,7 @@ scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/proces
 
 process SEURAT__CLUSTERING {
 	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(sobj)
 	val assay
