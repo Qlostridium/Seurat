@@ -24,11 +24,11 @@ process SEURAT__SCE_TO_SEURAT {
   input:
 	tuple val(samplename), file(sceobj)
   output:
-	tuple val(samplename),file("${samplename}.SEURAT__SCE_TO_SEURAT.rds") \
-	--output "${samplename}.SEURAT__SCE_TO_SEURAT.rds"
+	tuple val(samplename),file("${samplename}.SEURAT__SCE_TO_SEURAT.rds")
   script:
 	"""
 	Rscript ${scriptDir}/utils/sceToSeurat.R --sceObj ${sceobj}
+	--output "${samplename}.SEURAT__SCE_TO_SEURAT.rds"
 	"""
 }
 

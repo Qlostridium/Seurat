@@ -5,6 +5,7 @@ scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/proces
 
 process SEURAT__SCALING{
 	//publishDir "${params.global.outDir}/${samplename}", mode: 'symlink'
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(sobj)
 	val assayType

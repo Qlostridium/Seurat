@@ -211,7 +211,7 @@ if("rbc.genes" %in% names(seuratObj@misc) && "covid.genes" %in% names(seuratObj@
       DFn$HVG[i]<-FALSE
     }
 
-    if(DFm$genes[i] %in% HVG.marker.genes){
+    if(DFn$genes[i] %in% HVG.marker.genes){
       DFn$MARKER[i]<-TRUE
     } else{
       if(DFn$genes[i] %in% nonHVG.marker.genes){

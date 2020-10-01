@@ -97,6 +97,7 @@ diagnostics[['libsize.drop.low']] <- sum(libsize.drop.low)
 diagnostics[['libsize.drop.high']] <- sum(libsize.drop.high)
 diagnostics[['libsize.drop']] <- sum(metaData$nUMI.drop)
 varCols <- c('nGene.drop','nUMI.drop')
+varPlots <- c("nGene","nUMI")
 
 if(!is.na(opt$nmad_high_mito)){
   ## mitochondrial genes
@@ -107,6 +108,7 @@ if(!is.na(opt$nmad_high_mito)){
   diagnostics[['mito.drop.high']]<-sum(mito.drop.high)
   diagnostics[['mito.drop']]<-sum(metaData$mito.drop)
   varCols <- c(varCols, "mito.drop")
+  varPlots <- c(varPlots, "percent.mito")
 }
 
 ########################################
@@ -157,17 +159,24 @@ if("percent.COVID" %in% colnames(metaData) && "percent.rbc" %in% colnames(metaDa
   drawVlnPlot_color_nUMI_extra(metaData,"Plots/RNA/02a_Outliers_colors_Extra_nUMI.png",
                                png.device.type = "cairo")
 
-  varCols <- c(varCols, "percent.rbc","percent.COVID")
+  varCols <- c(varCols, "final.drop","final.drop")
+  varPlots <- c(varPlots, "percent.rbc","percent.COVID")
+}else if("percent.rbc" %in% colnames(metaData)){
+  varCols <- c(varCols, "final.drop")
+  varPlots <- c(varPlots, "percent.rbc")
 }
+
 
 ### Before filtering
 drawVlnPlot(metaData, fileName = "Plots/RNA/02b_beforeFiltering.png",
+            varsToPlot = varPlots,
             colsToColor = varCols,
             png.device.type = "cairo")
 
 ### After filtering
 #toPlot <- metaData[! metaData$final.drop,]
 drawVlnPlot(metaData[! metaData$final.drop,], fileName = "Plots/RNA/02c_afterFiltering.png",
+            varsToPlot = varPlots,
             colsToColor = varCols,
             png.device.type = "cairo")
 

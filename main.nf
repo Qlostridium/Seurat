@@ -14,9 +14,13 @@ workflow HTO {
 workflow RNA {
 	main:
 	if(params.Seurat.seuratObjBuilder.inputFile == null){
-		seuratInput = Channel.fromPath(params.inputFile)
+		seuratInput = Channel.fromPath(params.Seurat.inputRdsFile)
 						.map{ file -> tuple(params.sampleName,file)}
 	} else {
+		include {
+					SEURAT__SEURAT_OBJECT_BUILDER
+				} from './processes/seuratObjBuilder/seuratObjBuilder.nf' params(params)
+
 		input = Channel.fromPath(params.Seurat.seuratObjBuilder.inputFile)
 						.map{ file -> tuple(params.sampleName,file)}
 		seuratInput = SEURAT__SEURAT_OBJECT_BUILDER(input)

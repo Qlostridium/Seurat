@@ -1,8 +1,5 @@
 #!/usr/bin/env Rscript
 
-# Libraries loading
-#suppressPackageStartupMessages(library(reticulate))
-#use_python("/usr/bin/python3")
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(optparse))
 suppressPackageStartupMessages(library(tidyverse))

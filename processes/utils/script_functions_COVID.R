@@ -1,59 +1,33 @@
 ##### Function drawVlnPlot
-drawVlnPlot<-function(toPlot, fileName, colsToColor, png.device.type = NULL){
-  toPlot<-toPlot[order(toPlot[,colsToColor[1]]),]
-  p_nGene <- ggplot(toPlot, aes(staticNr, nGene)) +
-    geom_violin(fill="gray80") +
-    geom_jitter(height = 0, width = 0.3, aes_string(col=colsToColor[1]), alpha=0.5) +
-    scale_color_manual(values=c("#00bfc4", "#F8766D")) +
-    theme_classic()
-
-  toPlot<-toPlot[order(toPlot[,colsToColor[2]]),]
-  p_nUMI <- ggplot(toPlot, aes(staticNr, nUMI)) +
-    geom_violin(fill="gray80") +
-    geom_jitter(height = 0, width = 0.3, aes_string(col=colsToColor[2]), alpha=0.5) +
-    scale_color_manual(values=c("#00bfc4", "#F8766D")) +
-    theme_classic()
-
-  toPlot<-toPlot[order(toPlot[,colsToColor[3]]),]
-  p_mito <- ggplot(toPlot, aes(staticNr, percent.mito)) +
-    geom_violin(fill="gray80") +
-    geom_jitter(height = 0, width = 0.3, aes_string(col=colsToColor[3]), alpha=0.5) +
-    scale_color_manual(values=c("#00bfc4", "#F8766D")) +
-    theme_classic()
-
-  toPlot<-toPlot[order(toPlot[,colsToColor[4]]),]
-  p_rbc <- ggplot(toPlot, aes(staticNr, percent.rbc)) +
-    geom_violin(fill="gray80") +
-    geom_jitter(height = 0, width = 0.3, alpha=0.5, aes(color="percent.rbc")) +
-    scale_color_manual(values=c("#00bfc4")) +
-    theme_classic()
-
-  toPlot<-toPlot[order(toPlot[,colsToColor[5]]),]
-  p_COVID <- ggplot(toPlot, aes(staticNr, percent.COVID)) +
-    geom_violin(fill="gray80") +
-    geom_jitter(height = 0, width = 0.3, alpha=0.5, aes(color="percent.COVID")) +
-    scale_color_manual(values=c("#00bfc4")) +
-    theme_classic()
-
-  grid.arrange(p_nGene, p_nUMI,p_mito,p_rbc,p_COVID, ncol=5)
-  if(fileName != ""){
-    if(!is.null(png.device.type)){
-      ggsave(grid.arrange(p_nGene, p_nUMI,p_mito,p_rbc,p_COVID, ncol=5),
-             file=fileName,
-             dpi=200,
-             units = "mm",
-             width = 500, height = 100,
-             type = png.device.type)
+drawVlnPlot <-function(toPlot, fileName, varsToPlot,colsToColor, png.device.type = NULL){
+  plotlist <- list()
+  for(i in 1:length(varsToPlot)){
+    toPlot<-toPlot[order(toPlot[,colsToColor[i]]),]
+    
+    if(is.logical(toPlot[,colsToColor[i]])){
+      plotlist[[i]] <- ggplot(toPlot, aes_string("staticNr", varsToPlot[i])) +
+        geom_violin(fill="gray80") +
+        geom_jitter(height = 0, width = 0.3, aes_string(col=colsToColor[i]), alpha=0.5) +
+        scale_color_manual(values=c("#00bfc4", "#F8766D")) +
+        theme_classic()
     }else{
-      ggsave(grid.arrange(p_nGene, p_nUMI,p_mito,p_rbc,p_COVID, ncol=5),
-             file=fileName,
-             dpi=200,
-             units = "mm",
-             width = 500, height = 100)
+      plotlist[[i]] <- ggplot(toPlot, aes_string("staticNr", varsToPlot[i])) +
+        geom_violin(fill="gray80") +
+        geom_jitter(height = 0, width = 0.3, alpha=0.5, aes(col = !!colsToColor[i])) +
+        scale_color_manual(values=c("#00bfc4")) +
+        theme_classic()
     }
   }
+  
+  if(fileName != ""){
+    ggsave(do.call("grid.arrange", c(plotlist, ncol=length(plotlist))),
+           file=fileName,
+           dpi=200,
+           units = "mm",
+           width = 500, height = 100,
+           type = png.device.type)
+  }
 }
-
 ##### Function drawVlnPlot_out
 drawVlnPlot_out<-function(toPlot, fileName, colsToColor, png.device.type = NULL){
   listplot <- list()

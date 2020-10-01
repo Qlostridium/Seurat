@@ -3,7 +3,8 @@ nextflow.preview.dsl=2
 scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
 process SEURAT__MARKER_GENES{
-	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink'
+	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(sobj)
 	output:

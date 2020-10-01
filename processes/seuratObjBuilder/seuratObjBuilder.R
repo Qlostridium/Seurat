@@ -26,7 +26,7 @@ option_list = list(
 )
 
 opt = parse_args(OptionParser(option_list=option_list))
-
+print(opt)
 # Functions
 readSTARsolo <- function(sample) {
   if(is.null(sample.name)){
@@ -110,7 +110,7 @@ if(grepl("\\.h5",as.character(opt$inputMatrix))){
     seuratobj.counts <- CreateSeuratObject(counts = counts.matrix,
                                            min.features= opt$minFeaturesGEX, 
                                            min.cells = opt$minCellsGEX,
-                                           projName = opt$sample)
+                                           project = opt$sample)
   }
   
 } else{
@@ -128,7 +128,7 @@ if(grepl("\\.h5",as.character(opt$inputMatrix))){
       seuratobj.counts <- CreateSeuratObject(counts = counts.matrix,
                                              min.features= opt$minFeaturesGEX, 
                                              min.cells = opt$minCellsGEX,
-                                             projName = opt$sample)
+                                             project = opt$sample)
     }
   } else if ("genes.tsv" %in% file.names){
     counts.matrix <- Read10X(as.character(opt$inputMatrix))
@@ -136,14 +136,14 @@ if(grepl("\\.h5",as.character(opt$inputMatrix))){
     seuratobj.counts <- CreateSeuratObject(counts = counts.matrix,
                                            min.features = opt$minFeaturesGEX,
                                            min.cells = opt$minCellsGEX,
-                                           projName = opt$sample)
+                                           project = opt$sample)
   } else if ("features.tsv" %in% file.names){
     counts.matrix <- readSTARsolo(as.character(opt$inputMatrix))
     row.names(counts.matrix) <- gsub("_{1,}","-",row.names(counts.matrix))
     seuratobj.counts <- CreateSeuratObject(counts = counts.matrix,
                                            min.features = opt$minFeaturesGEX, 
                                            min.cells = opt$minCellsGEX,
-                                           projName = opt$sample)
+                                           project = opt$sample)
   } else {
     stop("unrecognized input format")
   }

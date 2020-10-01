@@ -5,6 +5,7 @@ scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/proces
 
 process SEURAT__DIMENSIONALITY_REDUCTION_PCA {
 	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/**"
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(seuratobj)
 	val assay
@@ -29,6 +30,7 @@ process SEURAT__DIMENSIONALITY_REDUCTION_PCA {
 
 process SEURAT__DIMENSIONALITY_REDUCTION_TSNE {
 	//publishDir "${params.out_dir}/${samplename}", mode: 'copy'
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(seuratobj)
 	val assayType

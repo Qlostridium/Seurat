@@ -59,6 +59,7 @@ if("subsample" %in% colnames(seuratObj@meta.data)){
   batch <- seuratObj$subsample
 }else{
   batch <- rep(seuratObj@project.name,ncol(seuratObj))
+  seuratObj$subsample <- rep(seuratObj@project.name,ncol(seuratObj))
 }
 
 ########################
@@ -108,6 +109,11 @@ metaData$staticNr <- 1
 genome1Pattern <- ifelse(is.na(opt$genomeName1),"",paste0(opt$genomeName1,"(_|-){1,}"))
 genome2Pattern <- ifelse(is.na(opt$genomeName2),"",paste0(opt$genomeName2,"(_|-){1,}"))
 
+if(opt$mitoGenes){
+  ##### Get mitochondrial genes #####
+  is.mito <- grepl(paste0("(^|",genome2Pattern,"|",genome1Pattern,")MT-"), rownames(seuratObj), ignore.case = TRUE)
+  metaData$percent.mito <- (Matrix::colSums(seuratObj@assays$RNA@counts[is.mito, ])/Matrix::colSums(seuratObj@assays$RNA@counts))*100
+}
 
 if(opt$covidGenes){
   #### Get COVID genes
@@ -118,6 +124,7 @@ if(opt$covidGenes){
   is.covid <- as.logical(rowSums(simplify2array(is.covidList)))
   metaData$percent.COVID <- (Matrix::colSums(seuratObj@assays$RNA@counts[is.covid, ])/Matrix::colSums(seuratObj@assays$RNA@counts))*100
 }
+
 if(opt$rbcGenes){
   seuratObj@misc$rbc.genes <- c("ADIPOR1", "ALAS2", "ATP5E", "BAG1", "BCL2L1", "BNIP3L",
                                   "BPGM", "BTF3", "CA1", "DCAF12", "EPB42", "FBXO7", "FKBP8",
@@ -132,11 +139,6 @@ if(opt$rbcGenes){
   is.rbcList <- lapply(rbcPatterns,function(x) grepl(x, rownames(seuratObj), ignore.case = TRUE))
   is.rbc <- as.logical(rowSums(simplify2array(is.rbcList)))
   metaData$percent.rbc <- (Matrix::colSums(seuratObj@assays$RNA@counts[is.rbc, ])/Matrix::colSums(seuratObj@assays$RNA@counts))*100
-}
-if(opt$mitoGenes){
-  ##### Get mitochondrial genes #####
-  is.mito <- grepl(paste0("(^|",genome2Pattern,"|",genome1Pattern,")MT-"), rownames(seuratObj), ignore.case = TRUE)
-  metaData$percent.mito <- (Matrix::colSums(seuratObj@assays$RNA@counts[is.mito, ])/Matrix::colSums(seuratObj@assays$RNA@counts))*100
 }
 
 print("########################## Plotting Data ##########################")

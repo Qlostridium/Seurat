@@ -9,12 +9,20 @@ include { SEURAT__MARKER_GENES } from '../processes/markerGenes/markerGenes.nf' 
 include { SEURAT__DIMENSIONALITY_REDUCTION_PCA } from '../processes/dimensionalityReduction/dimensionalityReduction.nf' params(params)
 include { SEURAT__CLUSTERING } from '../processes/clustering/clustering.nf' params(params)
 include { SEURAT__ANNOTATION_GRAPHS } from '../processes/annotationGraphs/annotationGraphs.nf' params(params)
+include {
+			SEURAT__SEURAT_TO_SCE
+			SEURAT__SCE_TO_SEURAT_WITH_MERGE
+		} from '../processes/utils/convertion.nf' params(params)
 
 workflow run_RNA {
 	take: inputtuple
 	main:
 		SEURAT__RNA_QC(inputtuple)
 		SEURAT__THRESHOLDFILTERING(SEURAT__RNA_QC.out[0])
+		// test of utils fonctions
+		SEURAT__SEURAT_TO_SCE(SEURAT__THRESHOLDFILTERING.out[0])
+		SEURAT__SCE_TO_SEURAT_WITH_MERGE(SEURAT__SEURAT_TO_SCE.out,SEURAT__THRESHOLDFILTERING.out[0])
+
 		SEURAT__SCTRANSFORM(SEURAT__THRESHOLDFILTERING.out[0])
 		SEURAT__FIND_VARIABLE_FEATURES(SEURAT__SCTRANSFORM.out,"SCT")
 		SEURAT__MARKER_GENES(SEURAT__FIND_VARIABLE_FEATURES.out[0])

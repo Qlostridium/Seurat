@@ -4,6 +4,7 @@ scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/proces
 
 process SEURAT__THRESHOLDFILTERING{
 	publishDir "${params.global.outdir}/${samplename}", mode: 'symlink', pattern: "Plots/RNA/**"
+	container params.Seurat.container
 	input:
 	tuple val(samplename), file(sobj)
 	output:

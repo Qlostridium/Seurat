@@ -15,13 +15,7 @@ option_list = list(
     "--seuratObj",
     default=NA,
     type='character',
-    help="File path to the rds file containing a Seurat object."
-  ),
-  make_option(
-    "--scriptFunctions",
-    default=NA,
-    type='character',
-    help="path of the script_funtions_covid.R file"
+    help="To merge the SCE object, file path to a rds file containing a Seurat object."
   ),
   make_option(
     "--output",
@@ -33,9 +27,7 @@ option_list = list(
 
 opt <- parse_args(OptionParser(option_list=option_list))
 
-source(opt$scriptFunctions)
-
-sce <- readRDS(file= opt$sceObj)
+sce <- readRDS(opt$sceObj)
 seuratObj_tmp <- as.Seurat(sce, assay = "RNA", counts = "counts", data = "logcounts")
 
 if(!is.na(opt$seuratObj)){
@@ -43,13 +35,13 @@ if(!is.na(opt$seuratObj)){
   cells.to.keep <- colnames(sce)
   seuratObj<- subset(seuratObj, cells=cells.to.keep)
   seuratObj[["RNA"]] <- seuratObj_tmp[["RNA"]]
-  metaD <- merge(seuratObj@meta.data, seuratObj_tmp@meta.data, by=0, all=TRUE, sort=FALSE)
+  metaD <- merge(seuratObj@meta.data, seuratObj_tmp@meta.data,all=TRUE, sort=FALSE)
   rownames(metaD) <- metaD$Row.names
   metaD$Row.names <- NULL
   seuratObj@meta.data <- metaD
 }else {
   seuratObj <- seuratObj_tmp
-  seuratObj@project.name <- sce@NAMES
+  seuratObj@project.name <- sce@metadata$project.name
 }
 
 seuratObj@tools$diagnostics <- c(seuratObj@tools$diagnostics,sce@metadata$diagnostics)
