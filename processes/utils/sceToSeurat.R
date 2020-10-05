@@ -35,7 +35,9 @@ if(!is.na(opt$seuratObj)){
   cells.to.keep <- colnames(sce)
   seuratObj<- subset(seuratObj, cells=cells.to.keep)
   seuratObj[["RNA"]] <- seuratObj_tmp[["RNA"]]
-  metaD <- merge(seuratObj@meta.data, seuratObj_tmp@meta.data,all=TRUE, sort=FALSE)
+  diffVariable <- !colnames(seuratObj_tmp@meta.data) %in% colnames(seuratObj@meta.data)
+  meta_temp <- seuratObj_tmp@meta.data[,diffVariable]
+  metaD <- merge(seuratObj@meta.data,meta_temp,by=0)
   rownames(metaD) <- metaD$Row.names
   metaD$Row.names <- NULL
   seuratObj@meta.data <- metaD
