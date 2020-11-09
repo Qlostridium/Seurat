@@ -2,6 +2,22 @@
 nextflow.preview.dsl=2
 scriptDir = (params.global.standAlone == true) ? "${params.global.rundir}/processes": "${params.global.rundir}/src/Seurat/processes"
 
+process SEURAT__SEURAT_TO_ANNDATA {
+	//publishDir "${params.global.outDir}/${params.global.runName}", mode: 'symlink'
+	container params.Seurat.container
+  input:
+	tuple val(samplename), file(seuratobj)
+	val(assay)
+  output:
+	tuple val(samplename),file("${samplename}.SEURAT__SEURAT_TO_ANNDATA_*.h5ad")
+  script:
+	"""
+	Rscript ${scriptDir}/utils/seuratToAnnData.R --seuratObj ${seuratobj} \
+	--output "${samplename}.SEURAT__SEURAT_TO_ANNDATA_${assay}.h5ad" \
+	--assay "${assay}"
+	"""
+}
+
 process SEURAT__SCE_TO_SEURAT_WITH_MERGE {
 	//publishDir "${params.global.outDir}/${params.global.runName}", mode: 'symlink'
 	container params.Seurat.container

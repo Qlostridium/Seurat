@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(optparse))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(SingleCellExperiment))
 
 option_list = list(
   make_option(

@@ -82,9 +82,9 @@ if(opt$diagnosticPlots){
   dev.off()
 
   pdf(file=paste0("Plots/",opt$assay,"/07b_PCA_diag_",opt$assay,".pdf"), width = 10)
-  ElbowPlot(seuratObj ,reduction = reduc.name)
-  VizDimLoadings(seuratObj, dims = 1:opt$nPlotedPcs, reduction = reduc.name)
-  DimHeatmap(seuratObj,assays = opt$assay ,dims = 1:opt$nPlotedPcs, reduction = reduc.name, fast=FALSE)
+  print(ElbowPlot(seuratObj ,reduction = reduc.name))
+  print(VizDimLoadings(seuratObj, dims = 1:opt$nPlotedPcs, reduction = reduc.name))
+  print(DimHeatmap(seuratObj,assays = opt$assay ,dims = 1:opt$nPlotedPcs, reduction = reduc.name, fast=FALSE))
   dev.off()
 
   red.nb <- which(names(seuratObj@reductions) == reduc.name)
