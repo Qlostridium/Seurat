@@ -1,19 +1,19 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-include { SEURAT__RNA_QC } from '../processes/RNAQc/RNAQc.nf' params(params)
-include { SEURAT__THRESHOLDFILTERING } from '../processes/thresholdFiltering/thresholdFiltering.nf' params(params)
-include { SEURAT__SCTRANSFORM } from '../processes/scTransform/scTransform.nf' params(params)
-include { SEURAT__FIND_VARIABLE_FEATURES } from '../processes/findVariableFeatures/findVariableFeatures.nf' params(params)
-include { SEURAT__MARKER_GENES } from '../processes/markerGenes/markerGenes.nf' params(params)
-include { SEURAT__DIMENSIONALITY_REDUCTION_PCA } from '../processes/dimensionalityReduction/dimensionalityReduction.nf' params(params)
-include { SEURAT__CLUSTERING } from '../processes/clustering/clustering.nf' params(params)
-include { SEURAT__ANNOTATION_GRAPHS } from '../processes/annotationGraphs/annotationGraphs.nf' params(params)
+include { SEURAT__RNA_QC } from '../processes/RNAQc.nf' params(params)
+include { SEURAT__THRESHOLDFILTERING } from '../processes/thresholdFiltering.nf' params(params)
+include { SEURAT__SCTRANSFORM } from '../processes/scTransform.nf' params(params)
+include { SEURAT__FIND_VARIABLE_FEATURES } from '../processes/findVariableFeatures.nf' params(params)
+include { SEURAT__MARKER_GENES } from '../processes/markerGenes.nf' params(params)
+include { SEURAT__DIMENSIONALITY_REDUCTION_PCA } from '../processes/dimensionalityReduction.nf' params(params)
+include { SEURAT__CLUSTERING } from '../processes/clustering.nf' params(params)
+include { SEURAT__ANNOTATION_GRAPHS } from '../processes/annotationGraphs.nf' params(params)
 include {
 			SEURAT__SEURAT_TO_SCE
 			SEURAT__SCE_TO_SEURAT_WITH_MERGE
 			SEURAT__SEURAT_TO_ANNDATA
-		} from '../processes/utils/convertion.nf' params(params)
+		} from '../processes/convertion.nf' params(params)
 
 workflow run_RNA {
 	take: inputtuple
